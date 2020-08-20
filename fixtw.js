@@ -81,7 +81,7 @@ function insertLinks() {
 }
 
 // On address paste, remove zip code.
-function observeAddressPaste() {
+function onAddressPasteRemoveZip() {
     let addrElem = document.getElementById('case_illegal_place');
     addrElem.addEventListener('paste', (event) => {
 	let paste = (event.clipboardData || window.clipboardData).getData('text');
@@ -93,7 +93,7 @@ function observeAddressPaste() {
 }
 
 // On submit, store form content.
-function observeAddressPaste() {
+function onSubmitStoreForm() {
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', (event) => {
 	storeForm();
@@ -101,4 +101,5 @@ function observeAddressPaste() {
 }
 
 insertLinks();
-observeAddressPaste();
+onAddressPasteRemoveZip();
+onSubmitStoreForm();
