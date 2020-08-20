@@ -29,6 +29,33 @@ function extractLicensePlates() {
     return false;
 }
 
+// Extracts datetime stamp from image filenames.
+function extractDateTime() {
+    let result = [];
+    let timestamp = null;
+    for (let elem of document.getElementsByClassName('image_picker_image')) {
+	let it = elem.innerText;
+	if (!it) {
+	    continue;
+	}
+	for (let chunk of it.split('_')) {
+	    let match = chunk.match(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)$/);
+	    if (!match) {
+		continue;
+	    }
+	    timestamp = match[1] + '-' match[2] + '-' + match[3] + ' ' + match[4] + ':' + match[5];
+	    break;
+	}
+	if (timestamp) {
+	    break;
+	}
+    }
+    if (!timestamp) {
+	document.getElementById('case_illegal_at').value = timestamp;
+    }
+    return false;
+}
+
 function storeForm() {
     let address = document.getElementById('case_illegal_place').value;
     let datetime = document.getElementById('case_illegal_at').value;
@@ -74,6 +101,8 @@ function insertLinks() {
 	formGroup.appendChild(div);
     }
     addLink('Extract license plates', 'extract-plates', extractLicensePlates);
+    addFlex();
+    addLink('Extract datetime', 'extract-datetime', extractDateTime);
     addFlex();
     addLink('Load form', 'load-form', loadForm);
 
