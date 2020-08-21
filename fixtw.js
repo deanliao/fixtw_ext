@@ -4,8 +4,6 @@
 
 'use strict';
 
-console.log("fixtw.js");
-
 // Extracts license plates from image filenames.
 function extractLicensePlates() {
     let result = [];
@@ -43,16 +41,23 @@ function extractDateTime() {
 	    if (!match) {
 		continue;
 	    }
-	    timestamp = match[1] + '-' match[2] + '-' + match[3] + ' ' + match[4] + ':' + match[5];
+	    timestamp = match[1] + '-' + match[2] + '-' + match[3] + ' ' + match[4] + ':' + match[5];
 	    break;
 	}
 	if (timestamp) {
 	    break;
 	}
     }
-    if (!timestamp) {
+    if (timestamp) {
 	document.getElementById('case_illegal_at').value = timestamp;
     }
+    return false;
+}
+
+// Extracts license plates and datetime from image filenames.
+function extractFromImageFilename() {
+    extractLicensePlates();
+    extractDateTime();
     return false;
 }
 
@@ -64,10 +69,7 @@ function storeForm() {
 	'address': address,
 	'datetime': datetime,
 	'comment': comment};
-
-    chrome.storage.sync.set(store, function() {
-	console.log('stored: ' + JSON.stringify(store));
-    });
+    chrome.storage.sync.set(store);
     return false;
 }
 
@@ -75,7 +77,6 @@ function loadForm() {
     chrome.storage.sync.get(
 	['address', 'datetime', 'comment'],
 	function(result) {
-	    console.log('load result: ' + JSON.stringify(result));
 	    document.getElementById('case_illegal_place').value = result.address;
 	    document.getElementById('case_illegal_at').value = result.datetime;
 	    document.getElementById('case_comment').value = result.comment;
@@ -100,9 +101,7 @@ function insertLinks() {
 	div.class='flex:1';
 	formGroup.appendChild(div);
     }
-    addLink('Extract license plates', 'extract-plates', extractLicensePlates);
-    addFlex();
-    addLink('Extract datetime', 'extract-datetime', extractDateTime);
+    addLink('Extract license plates & datetime', 'extract-plates', extractFromImageFilename);
     addFlex();
     addLink('Load form', 'load-form', loadForm);
 
