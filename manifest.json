@@ -25,5 +25,5 @@
     	"48": "images/favicon-48x48.png",
     	"128": "images/favicon-128.png"
     },
-    "manifest_version": 2
+    "manifest_version": 0.0.0.1
 }
